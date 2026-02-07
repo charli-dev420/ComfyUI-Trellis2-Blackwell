@@ -3,40 +3,46 @@
 FR (Francais)
 ------------
 
-Ce depot contient une image Docker et une configuration de template RunPod pour ComfyUI + Trellis2 (SM 12.0 / Blackwell).
+Ce depot fournit une image Docker et un template RunPod pour ComfyUI + Trellis2 (SM 12.0 / Blackwell).
 
-Contenu
-- Dockerfile: image CUDA + Python 3.12 compile, ComfyUI et extensions.
-- start.sh: demarrage du pod, SSH, FileBrowser, telechargements modeles, compilation CUDA au premier run.
-- RUNPOD_TEMPLATE.md: parametres a copier dans RunPod.
+Fichiers principaux
+- Dockerfile: image CUDA + Python 3.12 (compile depuis les sources), ComfyUI et dependances.
+- start.sh: demarrage du pod, SSH, FileBrowser, download des modeles, compilation CUDA au premier run.
+- RUNPOD_TEMPLATE.md: champs a copier dans RunPod.
+- README.md: documentation generale.
 
-Pre-requis
-- Docker Desktop ou Docker Engine
-- Acces a Docker Hub (ou autre registry) pour push l image
-
-Build et push (PowerShell)
-1) Definir le tag
+Demarrage rapide (PowerShell)
+1) Build
    docker build --network=host -t docker.io/<user>/comfyui-trellis2-blackwell:latest -f Dockerfile .
 2) Push
    docker push docker.io/<user>/comfyui-trellis2-blackwell:latest
 
 RunPod
-- Voir RUNPOD_TEMPLATE.md pour les champs a renseigner.
+- Utilise RUNPOD_TEMPLATE.md pour remplir le template.
 - Ports: 8188 (ComfyUI), 8080 (FileBrowser), 22 (SSH).
 
 SSH
-- Si RunPod injecte deja une cle dans ~/.ssh/authorized_keys, pas besoin de PUBLIC_KEY.
-- Sinon, definir PUBLIC_KEY ou recuperer le mot de passe root depuis les logs du pod.
+- Si RunPod injecte deja la cle dans ~/.ssh/authorized_keys, PUBLIC_KEY n est pas necessaire.
+- Sinon, definir PUBLIC_KEY ou recuperer le mot de passe root dans les logs.
 
 Modeles (premier run)
 - TRELLIS.2-4B et TRELLIS-image-large sont telecharges au premier demarrage.
-- Pour eviter HF_TOKEN, upload manuel possible dans:
+- Upload manuel possible pour eviter HF_TOKEN:
   - /workspace/runpod-slim/ComfyUI/models/microsoft/TRELLIS.2-4B
   - /workspace/runpod-slim/ComfyUI/models/microsoft/TRELLIS-image-large
 
 Compilation CUDA (premier run)
 - Les extensions CUDA (nvdiffrast, CuMesh, FlexGEMM, o_voxel) sont compilees au premier demarrage.
 - Le cache est conserve sur le volume.
+
+Depannage rapide
+- Premier run lent: compilation CUDA + download des modeles.
+- Reutilise le meme volume pour garder le cache.
+
+FAQ
+- Comment acceder au FileBrowser ? Utilise le port 8080 (HTTP) et connecte-toi avec admin/adminadmin12.
+- Pas de cle SSH ? Le mot de passe root est affiche dans les logs au demarrage.
+- HF_TOKEN manquant ? Upload manuel des modeles dans /workspace/runpod-slim/ComfyUI/models/microsoft/.
 
 ---
 
@@ -45,16 +51,13 @@ EN (English)
 
 This repository provides a Docker image and a RunPod template for ComfyUI + Trellis2 (SM 12.0 / Blackwell).
 
-Contents
-- Dockerfile: CUDA base image + Python 3.12 (built from source), ComfyUI and dependencies.
-- start.sh: pod startup, SSH, FileBrowser, model downloads, CUDA compilation on first run.
-- RUNPOD_TEMPLATE.md: copy/paste settings for RunPod.
+Key files
+- Dockerfile: CUDA base + Python 3.12 (built from source), ComfyUI and dependencies.
+- start.sh: pod startup, SSH, FileBrowser, model downloads, CUDA compile on first run.
+- RUNPOD_TEMPLATE.md: template fields for RunPod.
+- README.md: general documentation.
 
-Prerequisites
-- Docker Desktop or Docker Engine
-- Access to Docker Hub (or another registry) to push the image
-
-Build and push (PowerShell)
+Quick start (PowerShell)
 1) Build
    docker build --network=host -t docker.io/<user>/comfyui-trellis2-blackwell:latest -f Dockerfile .
 2) Push
@@ -65,15 +68,24 @@ RunPod
 - Ports: 8188 (ComfyUI), 8080 (FileBrowser), 22 (SSH).
 
 SSH
-- If RunPod injects your key into ~/.ssh/authorized_keys, you can omit PUBLIC_KEY.
-- Otherwise, set PUBLIC_KEY or retrieve the root password from pod logs.
+- If RunPod injects a key into ~/.ssh/authorized_keys, PUBLIC_KEY is not required.
+- Otherwise set PUBLIC_KEY or read the root password from pod logs.
 
 Models (first run)
 - TRELLIS.2-4B and TRELLIS-image-large are downloaded on first start.
-- If you already have the models, upload them to:
+- Manual upload avoids HF_TOKEN:
   - /workspace/runpod-slim/ComfyUI/models/microsoft/TRELLIS.2-4B
   - /workspace/runpod-slim/ComfyUI/models/microsoft/TRELLIS-image-large
 
 CUDA compilation (first run)
-- CUDA extensions (nvdiffrast, CuMesh, FlexGEMM, o_voxel) are compiled on first start.
-- Cache is stored on the volume.
+- CUDA extensions (nvdiffrast, CuMesh, FlexGEMM, o_voxel) compile on first start.
+- Cache persists on the volume.
+
+Quick troubleshooting
+- First start is slow due to CUDA compilation and model downloads.
+- Reuse the same volume to keep cache.
+
+FAQ
+- How do I access FileBrowser? Use port 8080 (HTTP) and login with admin/adminadmin12.
+- No SSH key? The root password is printed in logs at startup.
+- Missing HF_TOKEN? Manually upload models into /workspace/runpod-slim/ComfyUI/models/microsoft/.

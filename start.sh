@@ -10,6 +10,7 @@ CUDA_EXT_MARKER="/workspace/runpod-slim/.cuda_extensions_built"
 # SSH
 # --------------------------------------------------------------------------
 setup_ssh() {
+    mkdir -p /run/sshd
     mkdir -p ~/.ssh
     for type in rsa dsa ecdsa ed25519; do
         [ -f "/etc/ssh/ssh_host_${type}_key" ] || \

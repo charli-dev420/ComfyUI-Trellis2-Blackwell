@@ -8,7 +8,7 @@
 | Field | Value |
 |---|---|
 | **Template Name** | `ComfyUI-Trellis2-Blackwell` |
-| **Container Image** | `youruser/comfyui-trellis2-blackwell:latest` |
+| **Container Image** | `docker.io/username/comfyui-trellis2-blackwell:latest` |
 | **Docker Command** | *(leave empty)* |
 | **Container Disk** | `30 GB` (minimum) |
 | **Volume Disk** | `50 GB` (for models — TRELLIS.2-4B is ~16GB) |
