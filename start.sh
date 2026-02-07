@@ -123,18 +123,18 @@ compile_cuda_extensions() {
     # CuMesh
     git clone --depth 1 https://github.com/visualbruno/CuMesh.git
     (cd CuMesh && TORCH_CUDA_ARCH_LIST="12.0" CPLUS_INCLUDE_PATH="/usr/include/eigen3:$CPLUS_INCLUDE_PATH" \
-        CMAKE_BUILD_PARALLEL_LEVEL=1 MAX_JOBS=1 pip install . --no-build-isolation)
+        CMAKE_BUILD_PARALLEL_LEVEL=4 MAX_JOBS=4 pip install . --no-build-isolation)
     rm -rf CuMesh
 
     # FlexGEMM
     git clone --depth 1 https://github.com/JeffreyXiang/FlexGEMM.git
-    (cd FlexGEMM && TORCH_CUDA_ARCH_LIST="12.0" CMAKE_BUILD_PARALLEL_LEVEL=1 MAX_JOBS=1 \
+    (cd FlexGEMM && TORCH_CUDA_ARCH_LIST="12.0" CMAKE_BUILD_PARALLEL_LEVEL=4 MAX_JOBS=4 \
         pip install . --no-build-isolation)
     rm -rf FlexGEMM
 
     # o_voxel
     git clone --depth 1 https://github.com/visualbruno/TRELLIS.2.git
-    (cd TRELLIS.2/extensions/o-voxel && TORCH_CUDA_ARCH_LIST="12.0" CMAKE_BUILD_PARALLEL_LEVEL=1 MAX_JOBS=1 \
+    (cd TRELLIS.2/extensions/o-voxel && TORCH_CUDA_ARCH_LIST="12.0" CMAKE_BUILD_PARALLEL_LEVEL=4 MAX_JOBS=4 \
         pip install . --no-build-isolation)
     rm -rf TRELLIS.2
 
